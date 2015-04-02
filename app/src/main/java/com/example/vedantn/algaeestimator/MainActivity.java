@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.LocationManager;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -39,6 +42,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     final int PREDICTION_DAYS = 9;
     final double mathematicalE = 2.718281828459045;
 
+    //REQUEST CODES
+    public int CAMERA_REQUEST_CODE = 1313;
 
     //Variable Declaration
 
@@ -113,8 +118,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                if(location != null) {
                    userLat = location.getLatitude();
                    userLon = location.getLongitude();
-                   Toast.makeText(MainActivity.this,"Location Changed",Toast.LENGTH_LONG).show();
-                   lblTestLocation.setText("Location Changed \n" + userLat +"\n" + userLon);
+                   //Toast.makeText(MainActivity.this,"Location Changed",Toast.LENGTH_LONG).show();
+                   lblTestLocation.setText("Your Location\n" + userLat +"\n" + userLon);
 
                }
 
@@ -243,8 +248,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     }
     //Make all the components visible on the main page.
 
-    //Sets the current co-ordinates
-
 
     public void resetView()
     {
@@ -307,7 +310,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         setValues();
         finalCalculation();
 
-        displayResults();
         //setZero();
 
         //Intent to go to Results Activity
@@ -326,8 +328,15 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //String tst = data.getStringExtra("testResult");
-        //Toast.makeText(this,tst,Toast.LENGTH_LONG).show();
+        //Processing image from camera
+        if(requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK)
+        {
+            ImageView userImage = (ImageView) findViewById(R.id.userImage);
+            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            userImage.setImageBitmap(thumbnail);
+        }
+
+
     }
 
     //Sets values for all ser inputs and calculated values
@@ -456,8 +465,52 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 }
             }//Set n0
 
+            //Set r0 New Method
+            if(sTemp <= 15)
+            {
+                r0=r03;
+                customToast("No Algal Growth",false);
+            }
+            else if (tempDiff >= 4)
+            {
+                r0=r03;
+                customToast("No Algal Growth",false);
+            }
+            else if(tempDiff >=1.5)
+            {
+                if(pav<0.02)
+                {
+                    r0=r03;
+                    customToast("No Algal Growth",false);
+                }
+                else
+                {
+                    r0=r02;
+                    customToast("Moderate Algal Growth",false);
+                }
+            }
+            else
+            {
+                if(pav<0.02)
+                {
+                    r0=r03;
+                    customToast("No Algal Growth",false);
+                }
+                else if(pav < 0.05)
+                {
+                    r0=r02;
+                    customToast("Moderate Algal Growth",false);
+                }
+                else
+                {
+                    r0=r01;
+                    customToast("Maximum Algal Growth",false);
+                }
+            }//Set r0
+
+            /* Old Method
             //Set r0
-            if(sTemp>15 && pav > 0.02 && tempDiff <4)
+            if(sTemp>=15 && pav > 0.02 && tempDiff <4)
             {
                 if(tempDiff > 1)
                 {
@@ -472,7 +525,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             {
                 Toast.makeText(this,getString(R.string.no_algal_growth),Toast.LENGTH_SHORT).show();
             }//Set r0
-
+            */
             //Set k
         }
         catch (Exception e)
@@ -529,18 +582,18 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-
-    public void displayResults()
+    public void customToast(String str, Boolean length)
     {
-        /*
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,6000,0,locationListener);
-        userLat = location.getLatitude();
-        userLon = location.getLongitude();
-
-        String str = String.valueOf(userLat) + String.valueOf(userLon);
-        lblTestLocation.append(str);
-*/
-
+        if(length) {
+            Toast.makeText(this, str, Toast.LENGTH_LONG).show();
+        }
+        else    Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
+    public void takePicture(View view)
+    {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent,CAMERA_REQUEST_CODE);
+
+    }
 }

@@ -181,6 +181,15 @@
 
         </TableRow>
 
+        <TableRow android:layout_gravity="center">
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblTestLocation"
+                android:textStyle="bold"
+                />
+
+        </TableRow>
+
         <TableRow>
 
             <Button android:text="@string/btnLblCalc"
@@ -194,22 +203,22 @@
 
 
         </TableRow>
-        <TableRow android:layout_gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-                android:text="Location"
-                android:textStyle="bold"/>
-        </TableRow>
 
         <TableRow android:layout_gravity="center">
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/lblTestLocation"
-                android:textStyle="bold"
+            <Button android:text="Take Picture"
+                android:id="@+id/btnCamera"
+                android:layout_span="2"
+                android:onClick="takePicture"/>
+
+        </TableRow>
+        <TableRow android:layout_gravity="center">
+            <ImageView
+                android:id="@+id/userImage"
+                android:layout_span="2"
                 />
 
         </TableRow>
+
 
     </TableLayout>
 

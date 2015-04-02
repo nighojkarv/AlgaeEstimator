@@ -3,19 +3,20 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/new_background">
-
+    android:background="@drawable/new_background"
+    android:isScrollContainer="true">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World"
-        />
+        android:text="@string/graph_main_lbl"
+        android:textStyle="bold"/>
 
     <com.androidplot.xy.XYPlot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/graph"/>
-
+        android:id="@+id/graph"
+        android:padding="16dp"
+        android:paddingTop="150dp"/>
 
 </LinearLayout>

@@ -37,27 +37,53 @@ public class displayGraph extends Activity {
         arraySize = activityThatCalled.getExtras().getInt("arraySize");
 
         plot = (XYPlot) findViewById(R.id.graph);
-        //Initialize time and result arrays
+
+        //Initialization of plotting arrays
         Number[] timeArray = new Number[arraySize];
         Number[] growthArray = new Number[arraySize];
+        //Array for plotting the flat line
+        Number[] flatLineArray = new Number[arraySize];
+
+        //Converts double array to number array
+        //Sets the time interval array
+        //Sets the flat line array values to 40
         for(int i=0,j=0; i<arraySize;i++)
         {
+            flatLineArray[i] = 40;
             growthArray[i] = resultArray[i];
             timeArray[i]=j;
             j+=24;
         }
 
-        XYSeries series2 = new SimpleXYSeries(
+
+        //Main series to be plotted
+        XYSeries series = new SimpleXYSeries(
                 Arrays.asList(timeArray),
                 Arrays.asList(growthArray),
                 "Algal Growth");
 
-        LineAndPointFormatter series2Format = new LineAndPointFormatter();
-        LineAndPointFormatter formatter  = new LineAndPointFormatter();
+        //Series for the flat line
+        XYSeries flatLine = new SimpleXYSeries(
+                Arrays.asList(timeArray),
+                Arrays.asList(flatLineArray),"Mean");
 
+        //Formatter for the main series
+        LineAndPointFormatter seriesFormat = new LineAndPointFormatter();
+        //Formatter for the flat line
+        LineAndPointFormatter formatter  = new LineAndPointFormatter(Color.RED,Color.TRANSPARENT,Color.TRANSPARENT,new PointLabelFormatter(Color.TRANSPARENT));
+
+        //Sets the background graph
         plot.setDomainStep(XYStepMode.SUBDIVIDE,timeArray.length);
         plot.setRangeValueFormat(new DecimalFormat("0"));
-        plot.addSeries(series2,series2Format);
+        plot.setDomainValueFormat(new DecimalFormat("0"));
+        plot.setDomainLabel("Hours");
+        plot.setRangeLabel("mg/l");
+        plot.setRangeTopMin(300);
+        plot.getGraphWidget().getDomainOriginLabelPaint().setColor(Color.TRANSPARENT);
+
+        //Plots main series and flat line
+        plot.addSeries(series,seriesFormat);
+        plot.addSeries(flatLine,formatter);
 
 
 

@@ -41,5 +41,7 @@
     <string name="lblEstimatedAglalGrowth">Estimated Algal Growth</string>
     <string name="lblBack">Back</string>
     <string name="lblViewGraph">View Graph</string>
+    <string name="graph_main_lbl">Estimated Algal Growth</string>
+
 
 </resources>
