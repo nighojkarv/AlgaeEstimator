@@ -14,7 +14,8 @@ import java.text.DecimalFormat;
  */
 public class resultScreen extends Activity {
 
-
+    public double[] resultArray;
+    public int arraySize;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +24,8 @@ public class resultScreen extends Activity {
         Intent activityThatCalled = getIntent();
 
         //Gets the result array size from calling Intent
-        final int arraySize = activityThatCalled.getExtras().getInt("arraySize");
-        double[] resultArray = new double[arraySize];
+        arraySize = activityThatCalled.getExtras().getInt("arraySize");
+        resultArray = new double[arraySize];
 
         //Gets the result array from the main activity
         resultArray = activityThatCalled.getExtras().getDoubleArray("resultArray");
@@ -54,5 +55,17 @@ public class resultScreen extends Activity {
         //goingBack.putExtra("testResult",testRes);
         setResult(RESULT_OK, goingBack);
         finish();
+    }
+
+    public void openGraph(View view){
+        //Intent to go to Results Activity
+        Intent goToGraphScreenIntent = new Intent(resultScreen.this,displayGraph.class);
+        final int result =1;
+        //Adding result array size and result array to intent
+        goToGraphScreenIntent.putExtra("resultArray",resultArray);
+        goToGraphScreenIntent.putExtra("arraySize",arraySize);
+        //Opening result activity
+        startActivityForResult(goToGraphScreenIntent,result);
+
     }
 }

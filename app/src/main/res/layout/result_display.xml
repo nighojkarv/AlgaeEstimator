@@ -36,11 +36,12 @@
 
         <Button android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/lblViewGraph"/>
+            android:text="@string/lblViewGraph"
+            android:onClick="openGraph"/>
 
     </TableRow>
 </TableLayout>
         </LinearLayout>
 
-   </LinearLayout>
+</LinearLayout>
 

@@ -24,6 +24,11 @@
         <activity android:name=".resultScreen"
             android:label="ResultActivity"
             android:theme="@style/AppTheme" />
+
+        <activity android:name=".displayGraph"
+            android:label="GraphActivity"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>
