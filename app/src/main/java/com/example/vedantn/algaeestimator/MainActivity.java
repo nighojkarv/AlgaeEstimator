@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.location.LocationManager;
 import android.provider.MediaStore;
@@ -12,7 +13,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -32,7 +35,7 @@ import org.w3c.dom.Text;
 
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
-
+    //Variable Declaration
     //Constants
     public double r01 = 0.065;
     public double r02 = 0.034;
@@ -45,7 +48,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     //REQUEST CODES
     public int CAMERA_REQUEST_CODE = 1313;
 
-    //Variable Declaration
 
     //Input Values from user
     public double valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO;
@@ -56,12 +58,11 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     //Widget Declaration
     Spinner calcMethodSpinner;
-
-    /*Spinner spinnerDepth;
+    Spinner spinnerDepth;
     Spinner spinnerStemp;
     Spinner spinnerBotTemp;
     Spinner spinnerSD;
-*/
+
     EditText tbValueOfAlgal;
     EditText tbPbott;
     EditText tbDepth;
@@ -69,13 +70,18 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     EditText tbBotTemp;
     EditText tbSD;
     EditText tbDO;
-    TextView lblTestLocation;
+    TextView lblLocation;
 
     //GPS Variables
     public static double userLat, userLon;
     public static Location location = new Location(LocationManager.GPS_PROVIDER);
     LocationManager locationManager;
     LocationListener locationListener;
+
+    //Flags
+    public int flagDepth, flagStemp,flagBottemp,flagSD =0;
+    //Flags are set in the onItemSelected listener and are referred to in the setValues method
+
     //Variable Declaration Done
 
 
@@ -91,10 +97,19 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         calcMethodSpinner.setAdapter(adapterCalcMethod);
         calcMethodSpinner.setOnItemSelectedListener(this);
 
-        //spinnerDepth = (Spinner) findViewById(R.id.spinnerDepth);
-        //ArrayAdapter adapterDepth = ArrayAdapter.createFromResource(this,R.array.depthMeasure,android.R.layout.simple_spinner_dropdown_item);
-        //spinnerDepth.setAdapter(adapterDepth);
-        //spinnerDepth.setOnItemSelectedListener(this);
+        spinnerDepth = (Spinner) findViewById(R.id.spinnerDepth);
+        spinnerDepth.setOnItemSelectedListener(this);
+
+        spinnerStemp = (Spinner) findViewById(R.id.spinnerStemp);
+        spinnerStemp.setOnItemSelectedListener(this);
+
+        spinnerBotTemp = (Spinner) findViewById(R.id.spinnerBotTemp);
+        spinnerBotTemp.setOnItemSelectedListener(this);
+
+        spinnerSD = (Spinner) findViewById(R.id.spinnerSD);
+        spinnerSD.setOnItemSelectedListener(this);
+
+
 
         tbValueOfAlgal = (EditText) findViewById(R.id.tbValueOfAlgal);
         tbPbott = (EditText) findViewById(R.id.tbPbott);
@@ -103,12 +118,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         tbBotTemp = (EditText) findViewById(R.id.tbBotTemp);
         tbSD = (EditText) findViewById(R.id.tbSD);
         tbDO = (EditText) findViewById(R.id.tbDO);
-        lblTestLocation = (TextView) findViewById(R.id.lblTestLocation);
+        lblLocation = (TextView) findViewById(R.id.lblLocation);
 
-        //location.setLatitude(42.643213);
-        //location.setLongitude(-87.847922);
-        location.setLatitude(40.643213);
-        location.setLongitude(-80.847922);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         locationListener = new LocationListener() {
@@ -119,7 +130,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                    userLat = location.getLatitude();
                    userLon = location.getLongitude();
                    //Toast.makeText(MainActivity.this,"Location Changed",Toast.LENGTH_LONG).show();
-                   lblTestLocation.setText("Your Location\n" + userLat +"\n" + userLon);
+                   lblLocation.setText("Current Location\n" + userLat +"\n" + userLon);
 
                }
 
@@ -181,14 +192,15 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        TextView selection = (TextView) view;
-        Toast.makeText(this,selection.getText(),Toast.LENGTH_SHORT).show();
-
-        //For making unused components invisble from the main page when calculation mode is selected
-        switch (position)
+        //Listens to calcMethodSpinner
+        if(parent == (AdapterView)findViewById(R.id.calcMethodSpinner))
         {
-            case 0:
-                {
+            TextView selection = (TextView) view;
+            Toast.makeText(this, selection.getText(), Toast.LENGTH_SHORT).show();
+
+            //For making unused components invisble from the main page when calculation mode is selected
+            switch (position) {
+                case 0: {
                     resetView();
                     ((TextView) findViewById(R.id.lblValueOfAlgal)).setText("Total Chl a(mg/l)");
 
@@ -203,54 +215,84 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
                 }
 
-            case 1:
-            {
-                resetView();
-                ((TextView) findViewById(R.id.lblValueOfAlgal)).setVisibility(View.INVISIBLE);
-                ((EditText) findViewById(R.id.tbValueOfAlgal)).setVisibility(View.INVISIBLE);
+                case 1: {
+                    resetView();
+                    ((TextView) findViewById(R.id.lblValueOfAlgal)).setVisibility(View.INVISIBLE);
+                    ((EditText) findViewById(R.id.tbValueOfAlgal)).setVisibility(View.INVISIBLE);
 
-                break;
-            }
+                    break;
+                }
 
-            case 2:
-            {
-                resetView();
-                ((TextView) findViewById(R.id.lblValueOfAlgal)).setText("Cyno Chl a(μg/l)");
+                case 2: {
+                    resetView();
+                    ((TextView) findViewById(R.id.lblValueOfAlgal)).setText("Cyno Chl a(μg/l)");
 
-                ((TextView) findViewById(R.id.lblSD)).setVisibility(View.INVISIBLE);
-                ((EditText) findViewById(R.id.tbSD)).setVisibility(View.INVISIBLE);
-                ((Spinner) findViewById(R.id.spinnerSD)).setVisibility(View.INVISIBLE);
+                    ((TextView) findViewById(R.id.lblSD)).setVisibility(View.INVISIBLE);
+                    ((EditText) findViewById(R.id.tbSD)).setVisibility(View.INVISIBLE);
+                    ((Spinner) findViewById(R.id.spinnerSD)).setVisibility(View.INVISIBLE);
 
-                ((TextView) findViewById(R.id.lblDO)).setVisibility(View.INVISIBLE);
-                ((EditText) findViewById(R.id.tbDO)).setVisibility(View.INVISIBLE);
-                break;
-            }
+                    ((TextView) findViewById(R.id.lblDO)).setVisibility(View.INVISIBLE);
+                    ((EditText) findViewById(R.id.tbDO)).setVisibility(View.INVISIBLE);
+                    break;
+                }
 
-            case 3:
-            {
+                case 3: {
 
-                resetView();
-                ((TextView) findViewById(R.id.lblValueOfAlgal)).setVisibility(View.INVISIBLE);
-                ((EditText) findViewById(R.id.tbValueOfAlgal)).setVisibility(View.INVISIBLE);
+                    resetView();
+                    ((TextView) findViewById(R.id.lblValueOfAlgal)).setVisibility(View.INVISIBLE);
+                    ((EditText) findViewById(R.id.tbValueOfAlgal)).setVisibility(View.INVISIBLE);
 
-                ((TextView) findViewById(R.id.lblDO)).setVisibility(View.INVISIBLE);
-                ((EditText) findViewById(R.id.tbDO)).setVisibility(View.INVISIBLE);
-                break;
+                    ((TextView) findViewById(R.id.lblDO)).setVisibility(View.INVISIBLE);
+                    ((EditText) findViewById(R.id.tbDO)).setVisibility(View.INVISIBLE);
+                    break;
 
-            }
-            default:
-            {
-                resetView();
-            }
-        }//Switch
+                }
+                default: {
+                    resetView();
+                }
+            }//Switch
 
-
+        }
+        //Listens to spinnerDepth
+        if(parent == (AdapterView)findViewById(R.id.spinnerDepth))
+        {
+            if(position==1)
+                flagDepth =1;
+            else
+                flagDepth=0;
+        }
+        //Listens to spinnerStemp
+        if(parent == (AdapterView)findViewById(R.id.spinnerStemp))
+        {
+            if(position==1)
+                flagStemp =1;
+            else
+                flagStemp=0;
+        }
+        //Listens to spinnerBotTemp
+        if(parent == (AdapterView)findViewById(R.id.spinnerBotTemp))
+        {
+            if(position==1)
+                flagBottemp =1;
+            else
+                flagBottemp=0;
+        }
+        //Listens to spinnerSD
+        if(parent == (AdapterView)findViewById(R.id.spinnerSD))
+        {
+            if(position==1)
+                flagSD =1;
+            else
+                flagSD =0;
+        }
     }
-    //Make all the components visible on the main page.
+
 
 
     public void resetView()
     {
+        //Makes all the components visible on the main page
+
         ((TextView) findViewById(R.id.lblValueOfAlgal)).setText("Value of Algal (µg/ml)");
 
         ((TextView) findViewById(R.id.lblValueOfAlgal)).setVisibility(View.VISIBLE);
@@ -289,8 +331,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-    //Method to clear the Text Boxes on the main page
+
     public void methodClear(View view) {
+        //Method to clear the Text Boxes on the main page
 
         ((EditText) findViewById(R.id.tbValueOfAlgal)).setText("");
         ((EditText) findViewById(R.id.tbPbott)).setText("");
@@ -304,9 +347,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-    //Calculation using Verhulst equation
+
     public void methodCalculate(View view)
     {
+        //Calls the setVales and the calculate methods and opens result screen
         setValues();
         finalCalculation();
 
@@ -339,9 +383,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-    //Sets values for all ser inputs and calculated values
+
     public void setValues() {
 
+        //Sets values for all user inputs and calculated values
         try {
 
             //Get values from main activity for user inputs
@@ -380,10 +425,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 depth = Double.parseDouble(tbDepth.getText().toString());
             }
                 //Convert depth to meters
-            Spinner tempDepth = (Spinner) findViewById(R.id.spinnerDepth);
-            if (tempDepth.getSelectedItem().toString()=="ft") {
+            if (flagDepth==1)
+            {
                 depth = ftTOm(depth);
-
             }
 
             //Set sTemp
@@ -391,12 +435,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             {
                 sTemp = 0;
             }
-            else {
+            else
+            {
                 sTemp = Double.parseDouble(tbStemp.getText().toString());
             }
-                //Convert sTemp to Celcius
-            Spinner tempStemp = (Spinner) findViewById(R.id.spinnerStemp);
-            if ((String) tempStemp.getSelectedItem().toString() == "°F") {
+            //Convert sTemp to Celcius
+            if (flagStemp==1)
+            {
                 sTemp = fTOc(sTemp);
             }
 
@@ -408,9 +453,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             else {
                 botTemp = Double.parseDouble(tbBotTemp.getText().toString());
             }
-                //Convert botTemp to Celcius
-            Spinner tempBotTemp = (Spinner) findViewById(R.id.spinnerBotTemp);
-            if ((String) tempBotTemp.getSelectedItem().toString() == "°F") {
+            //Convert botTemp to Celcius
+            if (flagBottemp==1)
+            {
                 botTemp = fTOc(botTemp);
             }
 
@@ -419,12 +464,14 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             {
                 sD = 0;
             }
-            else {
+            else
+            {
                 sD = Double.parseDouble(tbSD.getText().toString());
             }
-                //Convert SD to meters
-            Spinner tempSD = (Spinner) findViewById(R.id.spinnerSD);
-            if ((String) tempSD.getSelectedItem().toString() == "ft") {
+            //Convert SD to meters
+
+            if (flagSD==1)
+            {
                 sD = ftTOm(sD);
             }
 
@@ -469,19 +516,19 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             if(sTemp <= 15)
             {
                 r0=r03;
-                customToast("No Algal Growth",false);
+                customToast("Minimal or no Algal Growth",false);
             }
             else if (tempDiff >= 4)
             {
                 r0=r03;
-                customToast("No Algal Growth",false);
+                customToast("Minimal or no Algal Growth",false);
             }
             else if(tempDiff >=1.5)
             {
                 if(pav<0.02)
                 {
                     r0=r03;
-                    customToast("No Algal Growth",false);
+                    customToast("Minimal or no Algal Growth",false);
                 }
                 else
                 {
@@ -494,7 +541,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 if(pav<0.02)
                 {
                     r0=r03;
-                    customToast("No Algal Growth",false);
+                    customToast("Minimal or no Algal Growth",false);
                 }
                 else if(pav < 0.05)
                 {
@@ -536,17 +583,19 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-    //Conversion from Feet to Meters
+
     public double ftTOm(double meters)
     {
+        //Conversion from Feet to Meters
         meters = meters / 3.2808;
         return meters;
 
     }
 
-    //Conversion from Faranhite to Celsius
+
     public double fTOc(double faranhite)
     {
+        //Conversion from Faranhite to Celsius
         faranhite = (faranhite-32)*(5/9);
         return faranhite;
 
@@ -567,11 +616,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
        }
     }
 
-    /*Sets all text box values to 0
-    This function is used to set the values of all text boxes to 0 after every calculation
-    */
+
     public void setZero()
     {
+        /*Sets all text box values to 0
+    This function is used to set the values of all text boxes to 0 after every calculation
+    */
         tbValueOfAlgal.setText("");
         tbPbott.setText("");
         tbDepth.setText("");
