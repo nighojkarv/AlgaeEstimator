@@ -41,20 +41,21 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     public double r02 = 0.034;
     public double r03 = 0.01;
     public double kCHL = 150;
-    public double kCHLY = 100;
+    public double kCHLY = 100; //blue green
     final int PREDICTION_DAYS = 9;
-    final double mathematicalE = 2.718281828459045;
+    final double MATHEMATICAL_E = 2.718281828459045;
 
     //REQUEST CODES
-    public int CAMERA_REQUEST_CODE = 1313;
+    public int CAMERA_REQUEST_CODE = 10887;
 
 
     //Input Values from user
     public double valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO;
 
     //Calculated Values
-    public double n0,r0,pav,tempDiff,k,nT;
-    public double [] answerArray = new double[PREDICTION_DAYS];
+    public double n0,r0,pav,tempDiff,kGreen,kBlueGreen,nTGreen,nTBlueGreen;
+    public double [] answerArrayGreen = new double[PREDICTION_DAYS];
+    public double [] answerArrayBlueGreen = new double[PREDICTION_DAYS];
 
     //Widget Declaration
     Spinner calcMethodSpinner;
@@ -129,7 +130,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                if(location != null) {
                    userLat = location.getLatitude();
                    userLon = location.getLongitude();
-                   //Toast.makeText(MainActivity.this,"Location Changed",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MainActivity.this,"Location Changed",Toast.LENGTH_LONG).show();
                    lblLocation.setText("Current Location\n" + userLat +"\n" + userLon);
 
                }
@@ -198,7 +199,42 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             TextView selection = (TextView) view;
             Toast.makeText(this, selection.getText(), Toast.LENGTH_SHORT).show();
 
-            //For making unused components invisble from the main page when calculation mode is selected
+            //For making unused components invisible from the main page when calculation mode is selected
+            switch (position) {
+
+                case 0:{
+
+                    resetView();
+
+                    ((TextView) findViewById(R.id.lblSD)).setVisibility(View.INVISIBLE);
+                    ((EditText) findViewById(R.id.tbSD)).setVisibility(View.INVISIBLE);
+                    ((Spinner) findViewById(R.id.spinnerSD)).setVisibility(View.INVISIBLE);
+
+                    ((TextView) findViewById(R.id.lblDO)).setVisibility(View.INVISIBLE);
+                    ((EditText) findViewById(R.id.tbDO)).setVisibility(View.INVISIBLE);
+                    break;
+                }
+                case 1:{
+
+                    resetView();
+
+                    ((TextView) findViewById(R.id.lblValueOfAlgal)).setVisibility(View.INVISIBLE);
+                    ((EditText) findViewById(R.id.tbValueOfAlgal)).setVisibility(View.INVISIBLE);
+                    break;
+
+
+                }
+
+                default:{
+
+                    resetView();
+                }
+
+            }
+
+
+            /*
+            *Old method with 4 options. Can be deleted ones the new method is finalized.
             switch (position) {
                 case 0: {
                     resetView();
@@ -251,7 +287,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     resetView();
                 }
             }//Switch
-
+                */
         }
         //Listens to spinnerDepth
         if(parent == (AdapterView)findViewById(R.id.spinnerDepth))
@@ -288,10 +324,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     }
 
 
-
+    //Makes all the components visible on the main page
     public void resetView()
     {
-        //Makes all the components visible on the main page
+
 
         ((TextView) findViewById(R.id.lblValueOfAlgal)).setText("Value of Algal (µg/ml)");
 
@@ -331,9 +367,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-
+    //Method to clear the Text Boxes on the main page
     public void methodClear(View view) {
-        //Method to clear the Text Boxes on the main page
+
 
         ((EditText) findViewById(R.id.tbValueOfAlgal)).setText("");
         ((EditText) findViewById(R.id.tbPbott)).setText("");
@@ -347,12 +383,18 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-
+    //Calls the setVales and the calculate methods and opens result screen
     public void methodCalculate(View view)
     {
-        //Calls the setVales and the calculate methods and opens result screen
+
         setValues();
         finalCalculation();
+        Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO);
+        DatabaseHandler dbHandler = new DatabaseHandler(this);
+        dbHandler.addResult(res);
+
+        //dbHandler.getAllResults();
+
 
         //setZero();
 
@@ -360,7 +402,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         Intent goToDisplayScreenIntent = new Intent(MainActivity.this,resultScreen.class);
         final int result =1;
         //Adding result array size and result array to intent
-        goToDisplayScreenIntent.putExtra("resultArray",answerArray);
+        goToDisplayScreenIntent.putExtra("resultArrayGreen",answerArrayGreen);
+        goToDisplayScreenIntent.putExtra("resultArrayBlueGreen",answerArrayBlueGreen);
         goToDisplayScreenIntent.putExtra("arraySize",PREDICTION_DAYS);
         //Opening result activity
         startActivityForResult(goToDisplayScreenIntent,result);
@@ -383,10 +426,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-
+    //Sets values for all user inputs and calculated values
     public void setValues() {
 
-        //Sets values for all user inputs and calculated values
+
         try {
 
             //Get values from main activity for user inputs
@@ -484,6 +527,24 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             tempDiff = sTemp-botTemp;
 
             //Set n0 and k
+            switch(calcMethodSpinner.getSelectedItemPosition()){
+
+                case 0: {
+                    n0 = valueOfAlgal;
+                    kGreen=kCHL;
+                    kBlueGreen = kCHLY;
+                    break;
+                }
+
+                case 1: {
+                    n0 = -6.4775+(21.6396*(1/sD))+0.0006*dO*dO;
+                    kGreen=kCHL;
+                    kBlueGreen = kCHLY;
+                    break;
+                }
+
+            }
+            /* Old method. Can be deleted if new method is finalized
             switch(calcMethodSpinner.getSelectedItemPosition())
             {
                 case 0:
@@ -511,7 +572,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     break;
                 }
             }//Set n0
-
+             */
             //Set r0 New Method
             if(sTemp <= 15)
             {
@@ -583,19 +644,19 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-
+    //Conversion from Feet to Meters
     public double ftTOm(double meters)
     {
-        //Conversion from Feet to Meters
+
         meters = meters / 3.2808;
         return meters;
 
     }
 
-
+    //Conversion from Faranhite to Celsius
     public double fTOc(double faranhite)
     {
-        //Conversion from Faranhite to Celsius
+
         faranhite = (faranhite-32)*(5/9);
         return faranhite;
 
@@ -603,25 +664,27 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     public void finalCalculation()
     {
-       int time=0;
-       for(int i=0;i<PREDICTION_DAYS; i++)
+
+       for(int i=0, time =0;i<PREDICTION_DAYS; i++)
        {
 
-           nT = (n0*k)/(n0+((k-n0)*Math.pow(mathematicalE,(-r0*time))));
+           nTGreen = (n0*kGreen)/(n0+((kGreen-n0)*Math.pow(MATHEMATICAL_E,(-r0*time))));
+           nTBlueGreen = (n0*kBlueGreen)/(n0+((kBlueGreen-n0)*Math.pow(MATHEMATICAL_E,(-r0*time))));
 
-           answerArray[i] = nT;
+           answerArrayGreen[i] = nTGreen;
+           answerArrayBlueGreen[i] = nTBlueGreen;
            time+=24;
-           //Toast.makeText(this,Double.toString(answerArray[2]),Toast.LENGTH_LONG).show();
+
 
        }
     }
 
-
+    /*Sets all text box values to 0
+        This function is used to set the values of all text boxes to 0 after every calculation
+        */
     public void setZero()
     {
-        /*Sets all text box values to 0
-    This function is used to set the values of all text boxes to 0 after every calculation
-    */
+
         tbValueOfAlgal.setText("");
         tbPbott.setText("");
         tbDepth.setText("");

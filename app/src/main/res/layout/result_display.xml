@@ -9,14 +9,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+<TableLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
+    <TableRow>
 
         <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/lblEstimatedAglalGrowth"
-        android:id="@+id/lblDisplayResults"/>
-
+        android:text="@string/lblEstimatedAglalGrowthGreen"
+        android:id="@+id/lblDisplayResultsGreen"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lblEstimatedAglalGrowthBlueGreen"
+            android:id="@+id/lblDisplayResultsBlueGreen"/>
+    </TableRow>
+</TableLayout>
     </LinearLayout>
 
     <LinearLayout

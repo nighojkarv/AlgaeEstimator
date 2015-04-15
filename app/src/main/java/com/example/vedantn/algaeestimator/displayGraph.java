@@ -22,7 +22,8 @@ import java.util.Date;
 public class displayGraph extends Activity {
 
     //Initialization
-    public double resultArray[];
+    public double resultArrayGreen[];
+    public double resultArrayBlueGreen[];
     public int arraySize;
     private XYPlot plot;
 
@@ -33,7 +34,8 @@ public class displayGraph extends Activity {
         setContentView(R.layout.graph_display);
         //Get the result array and the size of time array
         Intent activityThatCalled = getIntent();
-        resultArray = activityThatCalled.getExtras().getDoubleArray("resultArray");
+        resultArrayGreen = activityThatCalled.getExtras().getDoubleArray("resultArrayGreen");
+        resultArrayBlueGreen = activityThatCalled.getExtras().getDoubleArray("resultArrayBlueGreen");
         arraySize = activityThatCalled.getExtras().getInt("arraySize");
 
         plot = (XYPlot) findViewById(R.id.graph);
@@ -50,7 +52,7 @@ public class displayGraph extends Activity {
         for(int i=0,j=0; i<arraySize;i++)
         {
             flatLineArray[i] = 40;
-            growthArray[i] = resultArray[i];
+            growthArray[i] = resultArrayGreen[i];
             timeArray[i]=j;
             j+=24;
         }
@@ -78,7 +80,7 @@ public class displayGraph extends Activity {
         plot.setDomainValueFormat(new DecimalFormat("0"));
         plot.setDomainLabel("Hours");
         plot.setRangeLabel("mg/l");
-        plot.setRangeTopMin(300);
+        plot.setRangeTopMin(170);
         plot.getGraphWidget().getDomainOriginLabelPaint().setColor(Color.TRANSPARENT);
 
         //Plots main series and flat line

@@ -9,11 +9,13 @@
     <string name="lblSelectCalcMode">Select Calculation Mode</string>
 
     <string-array name="calcMethod">
-        <item>Directly from Cyanobact. Total Chl a</item>
+        <!--item>Directly from Cyanobact. Total Chl a</item>
         <item>Total Chl a estimate (SD and DO)</item>
         <item>Directly from Cyanobact. Chl a</item>
         <item>Cyanobact. Chl a estimate (SD)</item>
-        <item>Data Logs</item>
+        <item>Data Logs</item-->
+        <item>Directly from Cyanobact and Chl-a </item>
+        <item>Chl-a estimate</item>
     </string-array>
     <string-array name="depthMeasure">
         <item>m</item>
@@ -24,7 +26,8 @@
         <item>°F</item>
     </string-array>
 
-    <string name="valueOfAlgal">Value of Algal (µg/ml)</string>
+    <!--string name="valueOfAlgal">Value of Algal (µg/ml)</string-->
+    <string name="valueOfAlgal">Total Chl a(mg/l)</string>
     <string name="pBott">Phosphate at bottom (mg/l)</string>
     <string name="depth">Depth of lake (m)</string>
     <string name="stemp">Surface temperature</string>
@@ -38,7 +41,8 @@
     <string name="title_activity_splash_screen_activity">splash_screen_activity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="lblEstimatedAglalGrowth">Estimated Algal Growth</string>
+    <string name="lblEstimatedAglalGrowthGreen">Estimated Algal Growth: Green Algae</string>
+    <string name="lblEstimatedAglalGrowthBlueGreen">Estimated Algal Growth: Blue Green Algae</string>
     <string name="lblBack">Back</string>
     <string name="lblViewGraph">View Graph</string>
     <string name="graph_main_lbl">Estimated Algal Growth</string>

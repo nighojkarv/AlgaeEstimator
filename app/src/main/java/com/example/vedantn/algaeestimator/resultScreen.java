@@ -14,7 +14,8 @@ import java.text.DecimalFormat;
  */
 public class resultScreen extends Activity {
 
-    public double[] resultArray;
+    public double[] resultArrayGreen;
+    public double[] resultArrayBlueGreen;
     public int arraySize;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,22 +26,31 @@ public class resultScreen extends Activity {
 
         //Gets the result array size from calling Intent
         arraySize = activityThatCalled.getExtras().getInt("arraySize");
-        resultArray = new double[arraySize];
+        resultArrayGreen = new double[arraySize];
+        resultArrayBlueGreen = new double[arraySize];
 
         //Gets the result array from the main activity
-        resultArray = activityThatCalled.getExtras().getDoubleArray("resultArray");
+        resultArrayGreen = activityThatCalled.getExtras().getDoubleArray("resultArrayGreen");
+        resultArrayBlueGreen = activityThatCalled.getExtras().getDoubleArray("resultArrayBlueGreen");
 
-        //Displays the result this screen
-        TextView lblDisplayResults = (TextView) findViewById(R.id.lblDisplayResults);
-        lblDisplayResults.append("\n\n");
-        String str;
+        //Displays the result on the screen
+        TextView lblDisplayResultsGreen = (TextView) findViewById(R.id.lblDisplayResultsGreen);
+        TextView lblDisplayResultsBlueGreen = (TextView) findViewById(R.id.lblDisplayResultsBlueGreen);
+        lblDisplayResultsBlueGreen.append("\n");
+        lblDisplayResultsGreen.append("\n");
+        String strGreen, strBlueGreen;
+
         int hours = 0;
 
         DecimalFormat myFormat = new DecimalFormat("#.##");
         for(int i=0;i<arraySize;i++)
         {
-            str = String.valueOf(hours) + " hours : " + String.valueOf(String.format("%.2f",resultArray[i])) + "\n\n";
-            lblDisplayResults.append(str);
+            strGreen = String.valueOf(hours) + " hours : " + String.valueOf(String.format("%.2f",resultArrayGreen[i])) + "\n";
+            lblDisplayResultsGreen.append(strGreen);
+
+            strBlueGreen = String.valueOf(hours) + " hours : " + String.valueOf(String.format("%.2f",resultArrayBlueGreen[i])) + "\n";
+            lblDisplayResultsBlueGreen.append(strBlueGreen);
+
             hours +=24;
         }
 
@@ -62,7 +72,8 @@ public class resultScreen extends Activity {
         Intent goToGraphScreenIntent = new Intent(resultScreen.this,displayGraph.class);
         final int result =1;
         //Adding result array size and result array to intent
-        goToGraphScreenIntent.putExtra("resultArray",resultArray);
+        goToGraphScreenIntent.putExtra("resultArrayGreen",resultArrayGreen);
+        goToGraphScreenIntent.putExtra("resultArrayBlueGreen",resultArrayBlueGreen);
         goToGraphScreenIntent.putExtra("arraySize",arraySize);
         //Opening result activity
         startActivityForResult(goToGraphScreenIntent,result);
