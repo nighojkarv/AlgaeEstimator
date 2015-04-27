@@ -45,10 +45,10 @@ public class resultScreen extends Activity {
         DecimalFormat myFormat = new DecimalFormat("#.##");
         for(int i=0;i<arraySize;i++)
         {
-            strGreen = String.valueOf(hours) + " hours : " + String.valueOf(String.format("%.2f",resultArrayGreen[i])) + "\n";
+            strGreen = String.valueOf(hours) + " hours : " + String.valueOf(String.format("%.2f",resultArrayGreen[i])) +" (mg/l)" + "\n";
             lblDisplayResultsGreen.append(strGreen);
 
-            strBlueGreen = String.valueOf(hours) + " hours : " + String.valueOf(String.format("%.2f",resultArrayBlueGreen[i])) + "\n";
+            strBlueGreen = String.valueOf(hours) + " hours : " + String.valueOf(String.format("%.2f",resultArrayBlueGreen[i])) +" (mg/l)" + "\n";
             lblDisplayResultsBlueGreen.append(strBlueGreen);
 
             hours +=24;
