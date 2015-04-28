@@ -29,6 +29,10 @@
             android:label="GraphActivity"
             android:theme="@style/AppTheme"/>
 
+        <activity android:name=".databaseView"
+            android:label="DatabaseActivity"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>

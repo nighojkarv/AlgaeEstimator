@@ -389,11 +389,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         setValues();
         finalCalculation();
-        Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO);
-        DatabaseHandler dbHandler = new DatabaseHandler(this);
-        dbHandler.addResult(res);
 
-        //dbHandler.getAllResults();
+
+
 
 
         //setZero();
@@ -708,5 +706,24 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent,CAMERA_REQUEST_CODE);
 
+    }
+
+    public void methodSave(View vew){
+
+        Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO);
+        DatabaseHandler dbHandler = new DatabaseHandler(this);
+        dbHandler.addResult(res);
+
+    }
+    public void methodHistoric(View view){
+
+        Intent historicIntent = new Intent(MainActivity.this,databaseView.class);
+
+        final int result =1;
+        //Adding result array size and result array to intent
+        //goToDisplayScreenIntent.putExtra("resultArrayGreen",answerArrayGreen);
+
+        //Opening result activity
+        startActivityForResult(historicIntent,result);
     }
 }
