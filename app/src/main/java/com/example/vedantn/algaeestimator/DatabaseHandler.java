@@ -13,6 +13,7 @@ import com.example.vedantn.algaeestimator.Result;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
+private int primKey = 1;
     // All Static variables
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -37,6 +38,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String LONGITUDE = "lon";
     private static final String DESCRIPTION ="desc";
     private static final String DATE_TIME = "datetime";
+    
 
     // Default constructor
     public DatabaseHandler(Context context) {
@@ -71,7 +73,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (result != null) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
-
+            values.put(PRIMARY_KEY, primKey++);
+            values.put(DATE_TIME, result.getDateTime());
             values.put(ALGAL, result.getAlgal());
             values.put(P_BOTT, result.getPbott());
             values.put(DEPTH, result.getDepth());
@@ -79,6 +82,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             values.put(BOT_TEMP, result.getBotTemp());
             values.put(SD, result.getSd());
             values.put(DO, result.getDo());
+            values.put(LATITUDE, result.getLat());
+            values.put(LONGITUDE, result.getLon());
+            values.put(DESCRIPTION, result.getDescription());
+            
+            
             // Inserting Row
             db.insert(TABLE_NAME, null, values);
             db.close(); // Closing database connection
@@ -100,13 +108,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if(cursor.moveToFirst()) {
             do{
                 Result res = new Result();
-                res.setAlgal(Double.parseDouble(cursor.getString(0)));
-                res.setPbott(Double.parseDouble(cursor.getString(1)));
-                res.setDepth(Double.parseDouble(cursor.getString(2)));
-                res.setStemp(Double.parseDouble(cursor.getString(3)));
-                res.setBotTemp(Double.parseDouble(cursor.getString(4)));
-                res.setSd(Double.parseDouble(cursor.getString(5)));
-                res.setDo(Double.parseDouble(cursor.getString(6)));
+                res.setAlgal(Double.parseDouble(cursor.getString(2)));
+                res.setPbott(Double.parseDouble(cursor.getString(3)));
+                res.setDepth(Double.parseDouble(cursor.getString(4)));
+                res.setStemp(Double.parseDouble(cursor.getString(5)));
+                res.setBotTemp(Double.parseDouble(cursor.getString(6)));
+                res.setSd(Double.parseDouble(cursor.getString(7)));
+                res.setDo(Double.parseDouble(cursor.getString(8)));
+                res.setLon(Double.parseDouble(cursor.getString(9)));
+                res.setLat(Double.parseDouble(cursor.getString(10)));
+                
                 resultList.add(res);
             } while (cursor.moveToNext());
         }
