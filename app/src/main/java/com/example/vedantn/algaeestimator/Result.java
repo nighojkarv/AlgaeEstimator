@@ -1,5 +1,9 @@
 package com.example.vedantn.algaeestimator;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 /*
  * The Item class contains the three main attributes
  * that we expect the item to have for this application,
@@ -19,6 +23,8 @@ public class Result {
     double _do;
     double lon;
     double lat;
+    String desc;
+    String datetime;
 
 
     public Result() {
@@ -26,7 +32,7 @@ public class Result {
 
     // Constructor for application
     public Result(double alg, double pb, double dep, double stem,
-                  double bot, double s, double d, double longi, double lati) {
+                  double bot, double s, double d, double longi, double lati, String des, String dtime) {
         this.algal = alg;
         this.pbott = pb;
         this.depth = dep;
@@ -36,6 +42,8 @@ public class Result {
         this._do = d;
         this.lon = longi;
         this.lat = lati;
+        this.desc = des;
+        this.dateTime = dtime;
     }
 
     public double getAlgal(){
@@ -101,5 +109,24 @@ public class Result {
     }
     public void setLat(double l){
         this.lat = l;
+    }
+    public String getDescription(){
+        return this.desc;
+    }
+    public void setDescription(String d){
+        this.desc = d;
+    }
+    
+    public String getDateTime(){
+        return this.dateTime;
+    }
+    public void setDateTime(){
+        this.dateTime = dateTimeHelper();
+    }
+    
+    public String dateTimeHelper(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        return (dateFormat.format(date));
     }
 }
