@@ -17,6 +17,8 @@ public class Result {
     double bottemp;
     double sd;
     double _do;
+    double lon;
+    double lat;
 
 
     public Result() {
@@ -24,7 +26,7 @@ public class Result {
 
     // Constructor for application
     public Result(double alg, double pb, double dep, double stem,
-                  double bot, double s, double d) {
+                  double bot, double s, double d, double longi, double lati) {
         this.algal = alg;
         this.pbott = pb;
         this.depth = dep;
@@ -32,6 +34,8 @@ public class Result {
         this.bottemp = bot;
         this.sd = s;
         this._do = d;
+        this.lon = longi;
+        this.lat = lati;
     }
 
     public double getAlgal(){
@@ -83,5 +87,19 @@ public class Result {
     }
     public void setDo(double d){
         this._do = d;
+    }
+    
+    public double getLong(){
+        return this.lon;
+    }
+    public void setLong(double l){
+        this.lon = l;
+    }
+    
+    public double getLat(){
+        return this.lat;
+    }
+    public void setLat(double l){
+        this.lat = l;
     }
 }
