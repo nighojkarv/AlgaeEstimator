@@ -98,14 +98,18 @@ public class Result {
     }
     
     public double getLong(){
-        return this.lon;
+        if(this.lon!=null)
+            return this.lon;
+        return 0.0;
     }
     public void setLong(double l){
         this.lon = l;
     }
     
     public double getLat(){
-        return this.lat;
+        if(this.lat!=null)
+            return this.lat;
+        return 0.0;
     }
     public void setLat(double l){
         this.lat = l;
