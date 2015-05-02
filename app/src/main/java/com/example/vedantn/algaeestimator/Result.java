@@ -111,10 +111,14 @@ public class Result {
         this.lat = l;
     }
     public String getDescription(){
-        return this.desc;
+        if(desc!=null)
+            return this.desc;
+        return "";
     }
     public void setDescription(String d){
-        this.desc = d;
+        if(d!=null)
+            this.desc = d;
+        this.desc = "";
     }
     
     public String getDateTime(){
