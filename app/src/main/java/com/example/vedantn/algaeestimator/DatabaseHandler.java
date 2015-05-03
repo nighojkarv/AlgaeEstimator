@@ -83,7 +83,7 @@ private int primKey = 1;
             values.put(SD, result.getSd());
             values.put(DO, result.getDo());
             values.put(LATITUDE, result.getLat());
-            values.put(LONGITUDE, result.getLon());
+            values.put(LONGITUDE, result.getLong());
             values.put(DESCRIPTION, result.getDescription());
             
             
@@ -115,7 +115,7 @@ private int primKey = 1;
                 res.setBotTemp(Double.parseDouble(cursor.getString(6)));
                 res.setSd(Double.parseDouble(cursor.getString(7)));
                 res.setDo(Double.parseDouble(cursor.getString(8)));
-                res.setLon(Double.parseDouble(cursor.getString(9)));
+                res.setLong(Double.parseDouble(cursor.getString(9)));
                 res.setLat(Double.parseDouble(cursor.getString(10)));
                 
                 resultList.add(res);

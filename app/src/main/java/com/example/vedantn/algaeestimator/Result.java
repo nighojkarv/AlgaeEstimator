@@ -24,7 +24,7 @@ public class Result {
     double lon;
     double lat;
     String desc;
-    String datetime;
+    String dateTime;
 
 
     public Result() {

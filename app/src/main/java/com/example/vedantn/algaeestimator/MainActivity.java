@@ -572,7 +572,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             }//Set n0
              */
             //Set r0 New Method
-            if(sTemp <= 15)
+            if(sTemp >= 15)
             {
                 r0=r03;
                 customToast("Minimal or no Algal Growth",false);
@@ -710,9 +710,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     public void methodSave(View vew){
 
-        Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO);
-        DatabaseHandler dbHandler = new DatabaseHandler(this);
-        dbHandler.addResult(res);
+        //TODO Add datetime and latitude-Longitude to database.
+        //Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO);
+        //DatabaseHandler dbHandler = new DatabaseHandler(this);
+        //dbHandler.addResult(res);
 
     }
     public void methodHistoric(View view){
