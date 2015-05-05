@@ -46,6 +46,7 @@
     <string name="lblBack">Back</string>
     <string name="lblViewGraph">View Graph</string>
     <string name="graph_main_lbl">Estimated Algal Growth</string>
+    <string name="lake_description_string">Enter a brief description of the lake (optional)</string>
 
 
 </resources>

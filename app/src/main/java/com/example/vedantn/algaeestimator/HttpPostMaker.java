@@ -29,5 +29,8 @@ public class HttpPostMaker extends Activity{
     HttpClient client  = new DefaultHttpClient();
     HttpPost post = new HttpPost(SERVER_URL);
 
+    public void postData(){
+    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 
+    }
 }

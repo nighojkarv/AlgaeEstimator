@@ -33,6 +33,9 @@ import android.location.LocationManager;
 import org.apache.commons.logging.Log;
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     //Variable Declaration
@@ -52,7 +55,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     //Input Values from user
     public double valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO;
 
+    public String lakeDescription;
+    final String DATE_TIME_FORMAT = "MM-dd-yyyy HH:mm:ss";
     //Calculated Values
+    public String dateTime;
     public double n0,r0,pav,tempDiff,kGreen,kBlueGreen,nTGreen,nTBlueGreen;
     public double [] answerArrayGreen = new double[PREDICTION_DAYS];
     public double [] answerArrayBlueGreen = new double[PREDICTION_DAYS];
@@ -71,10 +77,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     EditText tbBotTemp;
     EditText tbSD;
     EditText tbDO;
+    EditText tbLakeDescription;
     TextView lblLocation;
 
     //GPS Variables
-    public static double userLat, userLon;
+    public static double userLat = 0.0;
+    public static double userLon = 0.0;
     public static Location location = new Location(LocationManager.GPS_PROVIDER);
     LocationManager locationManager;
     LocationListener locationListener;
@@ -119,6 +127,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         tbBotTemp = (EditText) findViewById(R.id.tbBotTemp);
         tbSD = (EditText) findViewById(R.id.tbSD);
         tbDO = (EditText) findViewById(R.id.tbDO);
+        tbLakeDescription = (EditText) findViewById(R.id.tbLakeDescription);
         lblLocation = (TextView) findViewById(R.id.lblLocation);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -389,8 +398,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         setValues();
         finalCalculation();
-
-
+        setDateTime();
+        addToDatabase();
 
 
 
@@ -514,6 +523,14 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             if (flagSD==1)
             {
                 sD = ftTOm(sD);
+            }
+            //Set lake description
+            if(tbLakeDescription.length()==0){
+                lakeDescription = "";
+
+            }else
+            {
+                lakeDescription = String.valueOf(tbLakeDescription.getText());
             }
 
             // Sets all calculated values
@@ -708,14 +725,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-    public void methodSave(View vew){
 
-        //TODO Add datetime and latitude-Longitude to database.
-        //Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO);
-        //DatabaseHandler dbHandler = new DatabaseHandler(this);
-        //dbHandler.addResult(res);
-
-    }
     public void methodHistoric(View view){
 
         Intent historicIntent = new Intent(MainActivity.this,databaseView.class);
@@ -726,5 +736,21 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         //Opening result activity
         startActivityForResult(historicIntent,result);
+    }
+
+    public void addToDatabase(){
+
+        Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO,userLat,userLon,lakeDescription,dateTime);
+        DatabaseHandler dbHandler = new DatabaseHandler(this);
+        dbHandler.addResult(res);
+
+
+    }
+
+    public void setDateTime(){
+
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT);
+        dateTime = sdf.format(new Date());
+
     }
 }

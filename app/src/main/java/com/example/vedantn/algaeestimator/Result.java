@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 public class Result {
     // Class variables
 
-   //TODO - Add a primary key to the table
+   //TODO - Replace Primary Key with DateTime
     double algal;
     double pbott;
     double depth;
@@ -98,16 +98,16 @@ public class Result {
     }
     
     public double getLong(){
-        if(this.lon!=null)
+        if(this.lon !=0)
             return this.lon;
         return 0.0;
     }
     public void setLong(double l){
         this.lon = l;
     }
-    
+
     public double getLat(){
-        if(this.lat!=null)
+        if(this.lat!=0)
             return this.lat;
         return 0.0;
     }

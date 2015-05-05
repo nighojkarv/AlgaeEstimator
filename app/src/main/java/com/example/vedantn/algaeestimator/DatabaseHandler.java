@@ -25,7 +25,7 @@ private int primKey = 1;
     private static final String TABLE_NAME = "results";
 
     // Attribute names
-    //TODO - Add primary key and date time stamp to the table
+    //TODO - Replace primary key with DateTime
     private static final String PRIMARY_KEY = "pk";
     private static final String ALGAL = "algal";
     private static final String P_BOTT = "pbott";
