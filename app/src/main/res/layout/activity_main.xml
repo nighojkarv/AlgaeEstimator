@@ -197,7 +197,7 @@
         <TableRow>
             <Button android:text="Save"
                 android:id="@+id/btnSave"
-                android:onClick="methodSave"/>
+                />
 
             <Button android:text="Historic"
                 android:id="@+id/btnHistoric"
