@@ -589,7 +589,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             }//Set n0
              */
             //Set r0 New Method
-            if(sTemp >= 15)
+            if(sTemp <= 15)
             {
                 r0=r03;
                 customToast("Minimal or no Algal Growth",false);

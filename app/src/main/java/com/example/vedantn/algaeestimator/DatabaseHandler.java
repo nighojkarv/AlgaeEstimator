@@ -26,7 +26,7 @@ private int primKey = 1;
 
     // Attribute names
     //TODO - Replace primary key with DateTime
-    private static final String PRIMARY_KEY = "pk";
+    //private static final String PRIMARY_KEY = "pk";
     private static final String ALGAL = "algal";
     private static final String P_BOTT = "pbott";
     private static final String DEPTH = "depth";
@@ -50,7 +50,7 @@ private int primKey = 1;
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         // make the table
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + PRIMARY_KEY + "INTEGER, " +
+        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + //"(" + PRIMARY_KEY + "INTEGER, " +
                 DATE_TIME + " NUMERIC, " + ALGAL + " REAL, " + P_BOTT + " REAL, " + DEPTH + " REAL, "
                 + S_TEMP + " REAL, " + BOT_TEMP + " REAL, " + SD + " REAL, "
                 + DO + " REAL, " + LATITUDE + " REAL, " + LONGITUDE + " REAL, " + DESCRIPTION + "TEXT" + ")";
@@ -73,7 +73,7 @@ private int primKey = 1;
         if (result != null) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
-            values.put(PRIMARY_KEY, primKey++);
+            //values.put(PRIMARY_KEY, primKey++);
             values.put(DATE_TIME, result.getDateTime());
             values.put(ALGAL, result.getAlgal());
             values.put(P_BOTT, result.getPbott());

@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 public class Result {
     // Class variables
 
-   //TODO - Replace Primary Key with DateTime
+
     double algal;
     double pbott;
     double depth;
@@ -25,7 +25,7 @@ public class Result {
     double lat;
     String desc;
     String dateTime;
-
+    final String DATE_TIME_FORMAT = "MM-dd-yyyy HH:mm:ss";
 
     public Result() {
     }
@@ -133,7 +133,7 @@ public class Result {
     }
     
     public String dateTimeHelper(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
         Date date = new Date();
         return (dateFormat.format(date));
     }

@@ -28,11 +28,19 @@ public class databaseView extends Activity {
         List<Result> resultList = new ArrayList<Result>();
         DatabaseHandler dbh = new DatabaseHandler(this);
 
+
+        String itemsInList[] = new String[resultList.size()];
         //TODO - Add Datetime to the TEMP array
-        //resultList = dbh.getAllResults();
+        resultList = dbh.getAllResults();
 
         //TEMP - This array is for testing. This array will contain values from the database.
-        String itemsInList[] = {"5/3/2015 13:27:36","5/5/2015 11:23:16","5/6/2015 19:17:53"};
+        for(int i=0;i<resultList.size();i++)
+        {
+
+            itemsInList[i] =  resultList.get(i).getDateTime();
+
+        }
+        //String itemsInList[] = {"5/3/2015 13:27:36","5/5/2015 11:23:16","5/6/2015 19:17:53"};
         ListAdapter listAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,itemsInList);
 
         ListView dataListView = (ListView) findViewById(R.id.dataListView);
