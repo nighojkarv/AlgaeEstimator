@@ -25,13 +25,12 @@ public class databaseView extends Activity {
         setContentView(R.layout.database_view);
 
         //TODO - Integrate database
-        List<Result> resultList = new ArrayList<Result>();
-        DatabaseHandler dbh = new DatabaseHandler(this);
 
+        DatabaseHandler dbh = new DatabaseHandler(this);
+        List<Result> resultList = dbh.getAllResults();
 
         String itemsInList[] = new String[resultList.size()];
         //TODO - Add Datetime to the TEMP array
-        resultList = dbh.getAllResults();
 
         //TEMP - This array is for testing. This array will contain values from the database.
         for(int i=0;i<resultList.size();i++)

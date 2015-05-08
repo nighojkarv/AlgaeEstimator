@@ -50,7 +50,7 @@ private int primKey = 1;
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         // make the table
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + //"(" + PRIMARY_KEY + "INTEGER, " +
+        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +" ("+ //"(" + PRIMARY_KEY + "INTEGER, " +
                 DATE_TIME + " NUMERIC, " + ALGAL + " REAL, " + P_BOTT + " REAL, " + DEPTH + " REAL, "
                 + S_TEMP + " REAL, " + BOT_TEMP + " REAL, " + SD + " REAL, "
                 + DO + " REAL, " + LATITUDE + " REAL, " + LONGITUDE + " REAL, " + DESCRIPTION + "TEXT" + ")";
@@ -108,15 +108,18 @@ private int primKey = 1;
         if(cursor.moveToFirst()) {
             do{
                 Result res = new Result();
-                res.setAlgal(Double.parseDouble(cursor.getString(2)));
-                res.setPbott(Double.parseDouble(cursor.getString(3)));
-                res.setDepth(Double.parseDouble(cursor.getString(4)));
-                res.setStemp(Double.parseDouble(cursor.getString(5)));
-                res.setBotTemp(Double.parseDouble(cursor.getString(6)));
-                res.setSd(Double.parseDouble(cursor.getString(7)));
-                res.setDo(Double.parseDouble(cursor.getString(8)));
+                res.setDateTime(cursor.getString(0));
+                res.setAlgal(Double.parseDouble(cursor.getString(1)));
+                res.setPbott(Double.parseDouble(cursor.getString(2)));
+                res.setDepth(Double.parseDouble(cursor.getString(3)));
+                res.setStemp(Double.parseDouble(cursor.getString(4)));
+                res.setBotTemp(Double.parseDouble(cursor.getString(5)));
+                res.setSd(Double.parseDouble(cursor.getString(6)));
+                res.setDo(Double.parseDouble(cursor.getString(7)));
+                res.setLat(Double.parseDouble(cursor.getString(8)));
                 res.setLong(Double.parseDouble(cursor.getString(9)));
-                res.setLat(Double.parseDouble(cursor.getString(10)));
+                res.setDescription(cursor.getString(10));
+
                 
                 resultList.add(res);
             } while (cursor.moveToNext());

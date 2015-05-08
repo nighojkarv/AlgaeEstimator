@@ -32,7 +32,7 @@ public class Result {
 
     // Constructor for application
     public Result(double alg, double pb, double dep, double stem,
-                  double bot, double s, double d, double longi, double lati, String des, String dtime) {
+                  double bot, double s, double d, double lati, double longi, String des, String dtime) {
         this.algal = alg;
         this.pbott = pb;
         this.depth = dep;
@@ -128,8 +128,10 @@ public class Result {
     public String getDateTime(){
         return this.dateTime;
     }
-    public void setDateTime(){
-        this.dateTime = dateTimeHelper();
+    public void setDateTime(String d){
+
+        this.dateTime = d;
+
     }
     
     public String dateTimeHelper(){
