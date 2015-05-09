@@ -29,8 +29,28 @@ public class HttpPostMaker extends Activity{
     HttpClient client  = new DefaultHttpClient();
     HttpPost post = new HttpPost(SERVER_URL);
 
-    public void postData(int noOfValues){
-    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(noOfValues);
+    public void postData(String datetimeStamp,double algal,double pbott, double depth, double surfaceTemp, double bottomTemp,
+                            double secchiDepth, double dissolvedOxygen, double latitude,double longitude, String description ){
+
+        try {
+            List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+            pairs.add(new BasicNameValuePair("datetimeStamp", datetimeStamp));
+            pairs.add(new BasicNameValuePair("algal", String.valueOf(algal)));
+            pairs.add(new BasicNameValuePair("pbott", String.valueOf(pbott)));
+            pairs.add(new BasicNameValuePair("depth", String.valueOf(depth)));
+            pairs.add(new BasicNameValuePair("surfaceTemp", String.valueOf(surfaceTemp)));
+            pairs.add(new BasicNameValuePair("bottomTemp", String.valueOf(bottomTemp)));
+            pairs.add(new BasicNameValuePair("secchiDepth", String.valueOf(secchiDepth)));
+            pairs.add(new BasicNameValuePair("dissolvedOxygen", String.valueOf(dissolvedOxygen)));
+            pairs.add(new BasicNameValuePair("latitude", String.valueOf(latitude)));
+            pairs.add(new BasicNameValuePair("longitude", String.valueOf(longitude)));
+            pairs.add(new BasicNameValuePair("description", description));
+
+            post.setEntity(new UrlEncodedFormEntity(pairs));
+        }
+        catch(IOException e ){
+
+        }
 
     }
 }

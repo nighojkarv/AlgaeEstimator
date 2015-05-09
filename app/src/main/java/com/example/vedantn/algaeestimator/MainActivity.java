@@ -740,10 +740,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     public void addToDatabase(){
 
-        Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO,userLat,userLon,lakeDescription,dateTime);
-        DatabaseHandler dbHandler = new DatabaseHandler(this);
-        dbHandler.addResult(res);
+        //Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO,userLat,userLon,lakeDescription,dateTime);
+        //DatabaseHandler dbHandler = new DatabaseHandler(this);
+        //dbHandler.addResult(res);
 
+        //TODO - Test
+        HttpPostMaker p = new HttpPostMaker();
+        p.postData(dateTime,valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO,userLat,userLon,lakeDescription);
 
     }
 
