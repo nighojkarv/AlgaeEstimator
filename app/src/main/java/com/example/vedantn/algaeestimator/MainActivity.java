@@ -31,10 +31,24 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import org.apache.commons.logging.Log;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreProtocolPNames;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
@@ -55,7 +69,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     //Input Values from user
     public double valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO;
 
-    public String lakeDescription;
+    public String lakeDescription = "";
     final String DATE_TIME_FORMAT = "MM-dd-yyyy HH:mm:ss";
     //Calculated Values
     public String dateTime;
@@ -525,11 +539,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 sD = ftTOm(sD);
             }
             //Set lake description
+
             if(tbLakeDescription.length()==0){
                 lakeDescription = "";
 
             }else
             {
+
                 lakeDescription = String.valueOf(tbLakeDescription.getText());
             }
 
@@ -745,8 +761,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         //dbHandler.addResult(res);
 
         //TODO - Test
-        HttpPostMaker p = new HttpPostMaker();
-        p.postData(dateTime,valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO,userLat,userLon,lakeDescription);
+        HttpPostMaker p = new HttpPostMaker(dateTime,valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO,userLat,userLon,lakeDescription);
+        p.postNow();
+        /*
+        Thread postThread = new Thread(p);
+        p.run();
+        */
 
     }
 

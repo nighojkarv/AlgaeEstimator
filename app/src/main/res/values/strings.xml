@@ -3,7 +3,6 @@
 
     <string name="app_name">AlgaeEstimator</string>
     <string name="AE">Algae Estimator</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="options_exit_text">Exit</string>
     <string name="lblSelectCalcMode">Select Calculation Mode</string>
@@ -14,8 +13,8 @@
         <item>Directly from Cyanobact. Chl a</item>
         <item>Cyanobact. Chl a estimate (SD)</item>
         <item>Data Logs</item-->
-        <item>Directly from Cyanobact and Chl-a </item>
-        <item>Chl-a estimate</item>
+        <item>Enter Chl-a concentration </item>
+        <item>Estimate Chl-a concentration</item>
     </string-array>
     <string-array name="depthMeasure">
         <item>m</item>
