@@ -1,3 +1,21 @@
+/*
+*
+*  Copyright 2015 University of Wisconsin - Parkside
+*
+*  Licensed under the Apache License, Version 2.0 (the "License");
+*  you may not use this file except in compliance with the License.
+*  You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+*  Unless required by applicable law or agreed to in writing, software
+*  distributed under the License is distributed on an "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*  See the License for the specific language governing permissions and
+*  limitations under the License.
+*
+*
+*/
 package com.example.vedantn.algaeestimator;
 
 import android.app.Activity;
@@ -52,30 +70,45 @@ import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
+
     //Variable Declaration
     //Constants
-    public double r01 = 0.065;
-    public double r02 = 0.034;
-    public double r03 = 0.01;
-    public double kCHL = 150;
-    public double kCHLY = 100; //blue green
+    final double r01 = 0.065;
+    final double r02 = 0.034;
+    final double r03 = 0.01;
+    final double kCHL = 150;
+    final double kCHLY = 100; //blue green
     final int PREDICTION_DAYS = 9;
     final double MATHEMATICAL_E = 2.718281828459045;
+    final String DATE_TIME_FORMAT = "MM-dd-yyyy HH:mm:ss";
 
     //REQUEST CODES
     public int CAMERA_REQUEST_CODE = 10887;
 
 
     //Input Values from user
-    public double valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO;
-
+    public double valueOfAlgal;
+    public double pBott;
+    public double depth;
+    public double sTemp;
+    public double botTemp;
+    public double sD;
+    public double dO;
     public String lakeDescription = "";
-    final String DATE_TIME_FORMAT = "MM-dd-yyyy HH:mm:ss";
+
     //Calculated Values
     public String dateTime;
-    public double n0,r0,pav,tempDiff,kGreen,kBlueGreen,nTGreen,nTBlueGreen;
+    public double n0;
+    public double r0;
+    public double pav;
+    public double tempDiff;
+    public double kGreen;
+    public double kBlueGreen;
+    public double nTGreen;
+    public double nTBlueGreen;
     public double [] answerArrayGreen = new double[PREDICTION_DAYS];
     public double [] answerArrayBlueGreen = new double[PREDICTION_DAYS];
+
 
     //Widget Declaration
     Spinner calcMethodSpinner;
@@ -102,7 +135,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     LocationListener locationListener;
 
     //Flags
-    public int flagDepth, flagStemp,flagBottemp,flagSD =0;
+    public int flagDepth;
+    public int flagStemp;
+    public int flagBottemp;
+    public int flagSD =0;
     //Flags are set in the onItemSelected listener and are referred to in the setValues method
 
     //Variable Declaration Done
@@ -114,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        //Set values for the main spinner
         calcMethodSpinner = (Spinner) findViewById(R.id.calcMethodSpinner);
         ArrayAdapter adapterCalcMethod = ArrayAdapter.createFromResource(this,R.array.calcMethod,android.R.layout.simple_spinner_dropdown_item);
         calcMethodSpinner.setAdapter(adapterCalcMethod);
@@ -133,7 +169,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         spinnerSD.setOnItemSelectedListener(this);
 
 
-
+        //Get all user inputs
         tbValueOfAlgal = (EditText) findViewById(R.id.tbValueOfAlgal);
         tbPbott = (EditText) findViewById(R.id.tbPbott);
         tbDepth = (EditText) findViewById(R.id.tbDepth);
@@ -143,11 +179,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         tbDO = (EditText) findViewById(R.id.tbDO);
         tbLakeDescription = (EditText) findViewById(R.id.tbLakeDescription);
         lblLocation = (TextView) findViewById(R.id.lblLocation);
-
+        //Get GPS coordinates
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         locationListener = new LocationListener() {
             @Override
+            //This methods is called every time the GPS location changes
             public void onLocationChanged(Location location) {
 
                if(location != null) {
@@ -176,7 +213,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             }
         };
 
-
+        //Get location updated after 60000 milliseconds or 5 meters.
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,60000,5,locationListener);
 
     }
@@ -255,64 +292,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
             }
 
-
-            /*
-            *Old method with 4 options. Can be deleted ones the new method is finalized.
-            switch (position) {
-                case 0: {
-                    resetView();
-                    ((TextView) findViewById(R.id.lblValueOfAlgal)).setText("Total Chl a(mg/l)");
-
-                    ((TextView) findViewById(R.id.lblSD)).setVisibility(View.INVISIBLE);
-                    ((EditText) findViewById(R.id.tbSD)).setVisibility(View.INVISIBLE);
-                    ((Spinner) findViewById(R.id.spinnerSD)).setVisibility(View.INVISIBLE);
-
-
-                    ((TextView) findViewById(R.id.lblDO)).setVisibility(View.INVISIBLE);
-                    ((EditText) findViewById(R.id.tbDO)).setVisibility(View.INVISIBLE);
-                    break;
-
-                }
-
-                case 1: {
-                    resetView();
-                    ((TextView) findViewById(R.id.lblValueOfAlgal)).setVisibility(View.INVISIBLE);
-                    ((EditText) findViewById(R.id.tbValueOfAlgal)).setVisibility(View.INVISIBLE);
-
-                    break;
-                }
-
-                case 2: {
-                    resetView();
-                    ((TextView) findViewById(R.id.lblValueOfAlgal)).setText("Cyno Chl a(μg/l)");
-
-                    ((TextView) findViewById(R.id.lblSD)).setVisibility(View.INVISIBLE);
-                    ((EditText) findViewById(R.id.tbSD)).setVisibility(View.INVISIBLE);
-                    ((Spinner) findViewById(R.id.spinnerSD)).setVisibility(View.INVISIBLE);
-
-                    ((TextView) findViewById(R.id.lblDO)).setVisibility(View.INVISIBLE);
-                    ((EditText) findViewById(R.id.tbDO)).setVisibility(View.INVISIBLE);
-                    break;
-                }
-
-                case 3: {
-
-                    resetView();
-                    ((TextView) findViewById(R.id.lblValueOfAlgal)).setVisibility(View.INVISIBLE);
-                    ((EditText) findViewById(R.id.tbValueOfAlgal)).setVisibility(View.INVISIBLE);
-
-                    ((TextView) findViewById(R.id.lblDO)).setVisibility(View.INVISIBLE);
-                    ((EditText) findViewById(R.id.tbDO)).setVisibility(View.INVISIBLE);
-                    break;
-
-                }
-                default: {
-                    resetView();
-                }
-            }//Switch
-                */
         }
-        //Listens to spinnerDepth
+        //Sets the units for depth (m/f)
         if(parent == (AdapterView)findViewById(R.id.spinnerDepth))
         {
             if(position==1)
@@ -320,7 +301,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             else
                 flagDepth=0;
         }
-        //Listens to spinnerStemp
+        //Sets the units for surface temperature (C/F)
         if(parent == (AdapterView)findViewById(R.id.spinnerStemp))
         {
             if(position==1)
@@ -328,7 +309,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             else
                 flagStemp=0;
         }
-        //Listens to spinnerBotTemp
+        //Sets the units for bottom temperature (C/F)
         if(parent == (AdapterView)findViewById(R.id.spinnerBotTemp))
         {
             if(position==1)
@@ -336,7 +317,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             else
                 flagBottemp=0;
         }
-        //Listens to spinnerSD
+        //Sets the units for Secchi Depth (m/f)
         if(parent == (AdapterView)findViewById(R.id.spinnerSD))
         {
             if(position==1)
@@ -414,10 +395,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         finalCalculation();
         setDateTime();
         addToDatabase();
-
-
-
         //setZero();
+
 
         //Intent to go to Results Activity
         Intent goToDisplayScreenIntent = new Intent(MainActivity.this,resultScreen.class);
@@ -431,7 +410,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
 
     }
-
+    //Overridden method for capturing picture from the camera
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -575,36 +554,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 }
 
             }
-            /* Old method. Can be deleted if new method is finalized
-            switch(calcMethodSpinner.getSelectedItemPosition())
-            {
-                case 0:
-                {
-                    n0 = valueOfAlgal;
-                    k=kCHL;
-                    break;
-                }
-                case 1:
-                {
-                    n0 = -6.4775+(21.6396*(1/sD))+0.0006*dO*dO;
-                    k=kCHL;
-                    break;
-                }
-                case 2:
-                {
-                    n0=valueOfAlgal;
-                    k=kCHLY;
-                    break;
-                }
-                case 3:
-                {
-                    n0=0.409-(0.7486*sTemp)+(17.6979*(1/sD));
-                    k=kCHLY;
-                    break;
-                }
-            }//Set n0
-             */
-            //Set r0 New Method
+
+            //Set r0
             if(sTemp <= 15)
             {
                 r0=r03;
@@ -645,26 +596,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     r0=r01;
                     customToast("Maximum Algal Growth",false);
                 }
-            }//Set r0
-
-            /* Old Method
-            //Set r0
-            if(sTemp>=15 && pav > 0.02 && tempDiff <4)
-            {
-                if(tempDiff > 1)
-                {
-                    r0 = r02;
-                }
-                else
-                {
-                    r0 = r01;
-                }
             }
-            else //If the condition is not satisfied, there is no algal growth
-            {
-                Toast.makeText(this,getString(R.string.no_algal_growth),Toast.LENGTH_SHORT).show();
-            }//Set r0
-            */
+
             //Set k
         }
         catch (Exception e)
@@ -741,7 +674,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     }
 
-
+    //This method saves the values entered by the user to the local database.
     public void methodHistoric(View view){
 
         Intent historicIntent = new Intent(MainActivity.this,databaseView.class);
@@ -749,7 +682,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         final int result =1;
         //Adding result array size and result array to intent
         //goToDisplayScreenIntent.putExtra("resultArrayGreen",answerArrayGreen);
-
+        //TODO - Uncomment the above code  after the local database is functional
         //Opening result activity
         startActivityForResult(historicIntent,result);
     }
@@ -760,13 +693,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         //DatabaseHandler dbHandler = new DatabaseHandler(this);
         //dbHandler.addResult(res);
 
-        //TODO - Test
+        //FIXME - This method is not posting the data to the database
         HttpPostMaker p = new HttpPostMaker(dateTime,valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO,userLat,userLon,lakeDescription);
         p.postNow();
-        /*
-        Thread postThread = new Thread(p);
-        p.run();
-        */
 
     }
 
