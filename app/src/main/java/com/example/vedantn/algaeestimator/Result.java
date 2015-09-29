@@ -132,10 +132,11 @@ public class Result {
     public void setLat(double l){
         this.lat = l;
     }
+
     public String getDescription(){
         if(desc!=null)
             return this.desc;
-        return "";
+        return "null";
     }
     public void setDescription(String d){
         if(d!=null)

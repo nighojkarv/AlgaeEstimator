@@ -82,6 +82,8 @@ private int primKey = 1;
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
+        db.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME + ";");
+        onCreate(db);
 
     }
 
@@ -89,8 +91,9 @@ private int primKey = 1;
      * Adds a new Result to the database.
      */
     public void addResult(Result result) {
-        if (result != null) {
-            SQLiteDatabase db = this.getWritableDatabase();
+        /*
+        //if (result != null) {
+            //SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             //values.put(PRIMARY_KEY, primKey++);
             values.put(DATE_TIME, result.getDateTime());
@@ -104,12 +107,26 @@ private int primKey = 1;
             values.put(LATITUDE, result.getLat());
             values.put(LONGITUDE, result.getLong());
             values.put(DESCRIPTION, result.getDescription());
-            
-            
+            */
+
+            // ABOVE CODE WAS NOT WORKING - LEAVING IT THERE FOR SAKE OF PRACTICE
+
             // Inserting Row
-            db.insert(TABLE_NAME, null, values);
-            db.close(); // Closing database connection
-        }
+
+            //db.close(); // Closing database connection
+        //}
+
+        //String s = getWritableDatabase().toString();
+        //String sq = "INSERT INTO results values('7-22-2015 18:27', '1.0','1.0', '1.0', '1.0', " +
+        //        "'1.0', '1.0', '1.0', '1.0', '1.0', 'blah');";
+
+        String sql = "INSERT INTO RESULTS VALUES( '" + result.dateTime + "', '" + result.algal +
+                "', '" + result.pbott + "', '" + result.depth + "', '" + result.stemp + "', '" +
+                result.bottemp + "', '" + result.sd + "', '" + result._do + "', '" + result.lat +
+                "', '" + result.lon + "', '" + result.getDescription() + "' );";
+        getWritableDatabase().execSQL(sql);
+
+        //return getWritableDatabase().insert(TABLE_NAME, "nullColumnHack", values);
     }
 
     /*
@@ -153,5 +170,11 @@ private int primKey = 1;
         SQLiteDatabase db = this.getWritableDatabase();
         onCreate(db);
 
+    }
+
+    public int delete(long id){
+        String selection = "datetime" + " =?";
+        String[] selectionArgs = {String.valueOf(id)};
+        return getWritableDatabase().delete(TABLE_NAME, selection, selectionArgs);
     }
 }

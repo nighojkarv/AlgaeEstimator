@@ -689,13 +689,15 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     public void addToDatabase(){
 
-        //Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO,userLat,userLon,lakeDescription,dateTime);
-        //DatabaseHandler dbHandler = new DatabaseHandler(this);
-        //dbHandler.addResult(res);
+        Result res = new Result(valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO,userLat,userLon,lakeDescription,dateTime);
+        DatabaseHandler dbHandler = new DatabaseHandler(this);
+        dbHandler.addResult(res);
+        //System.out.println("Long from adding = " + l + "\n");
 
         //FIXME - This method is not posting the data to the database
         HttpPostMaker p = new HttpPostMaker(dateTime,valueOfAlgal,pBott,depth,sTemp,botTemp,sD,dO,userLat,userLon,lakeDescription);
         p.postNow();
+
 
     }
 

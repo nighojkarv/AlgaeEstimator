@@ -42,7 +42,7 @@ public class databaseView extends Activity {
 
         //FIXME - Integrate database. Data is not getting added to the local database.
 
-        DatabaseHandler dbh = new DatabaseHandler(this);
+        final DatabaseHandler dbh = new DatabaseHandler(this);
         List<Result> resultList = dbh.getAllResults();
 
         String itemsInList[] = new String[resultList.size()];
@@ -53,6 +53,7 @@ public class databaseView extends Activity {
         {
 
             itemsInList[i] =  resultList.get(i).getDateTime();
+
 
         }
         //String itemsInList[] = {"5/3/2015 13:27:36","5/5/2015 11:23:16","5/6/2015 19:17:53"};
@@ -86,6 +87,7 @@ public class databaseView extends Activity {
 
                         //TODO - On click, delete values from list and db.
 
+                    dbh.deleteAll();
                     }
                 });
                 deleteDialog.show();

@@ -42,7 +42,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * Created by vedant.n on 5/2/2015.
+ * This class uses a very common method of posting data to a remote DB using
+ * HTTP Post.  The only thing that makes it difficult is that you have to be
+ * connected to Sage (literally with a wire in the CS Lab) in order to test on it.
  */
 public class HttpPostMaker extends Activity {
 
@@ -80,7 +82,8 @@ public class HttpPostMaker extends Activity {
 
                     HttpClient client  = new DefaultHttpClient();
                     URI uri = new URI(SERVER_URL);
-                    HttpPost Newpost = new HttpPost(uri);
+                    //HttpPost Newpost = new HttpPost(uri);
+                    HttpPost Newpost = new HttpPost(SERVER_URL);
                     //HttpPost Newpost = new HttpPost(SERVER_URL);
 
 
@@ -98,7 +101,9 @@ public class HttpPostMaker extends Activity {
                     pairs.add(new BasicNameValuePair("description", description));
 
                     Newpost.setEntity(new UrlEncodedFormEntity(pairs));
+
                     HttpResponse response = client.execute(Newpost);
+                    System.out.println(response.toString());
                     Log.v("HTTPResponseOut",response.toString());
 
                 }
